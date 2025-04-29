@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>아기사자 과제PR 발표</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+          "Pretendard", "Noto Sans KR", sans-serif;
+      }
+
+      body {
+        background-color: white;
+        color: #333;
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 24px 16px;
+        background-color: white;
+        min-height: 100vh;
+      }
+
+      header {
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #191f28;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 15px;
+        color: #8b95a1;
+        margin-bottom: 32px;
+      }
+
+      .action-button {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: #ffd9be;
+        color: #f0873e;
+
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 32px;
+        transition: background-color 0.2s;
+      }
+
+      .action-button:hover {
+        background-color: #f0873e;
+        color: white;
+      }
+
+      .fortune-results {
+        display: none;
+      }
+
+      .result-card {
+        background-color: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f2f4f6;
+      }
+
+      .result-card h2 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        color: #191f28;
+        display: flex;
+        align-items: center;
+      }
+
+      .result-card h2 .emoji {
+        margin-right: 8px;
+        font-size: 22px;
+      }
+
+      .fortune-text {
+        font-size: 16px;
+        color: #4e5968;
+        margin-bottom: 12px;
+        line-height: 1.6;
+      }
+
+      .score {
+        font-size: 15px;
+        color: #4e5968;
+        margin-bottom: 12px;
+      }
+
+      .score-bar {
+        height: 8px;
+        background-color: #edf1f7;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+
+      .score-fill {
+        height: 100%;
+        background: linear-gradient(to right, #eae255, #e7892b);
+        border-radius: 4px;
+      }
+
+      .comment {
+        font-size: 14px;
+        color: #8b95a1;
+        font-weight: 500;
+      }
+
+      .presenter {
+        background-color: #fffdfb;
+        border-radius: 16px;
+        padding: 24px;
+        margin-top: 32px;
+        text-align: center;
+        border: 1px solid #ffd9be;
+        margin-bottom: 50px;
+      }
+
+      .presenter-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #f0873e;
+        margin-bottom: 16px;
+      }
+
+      .presenter-name {
+        font-size: 32px;
+        font-weight: 700;
+        color: #191f28;
+        margin-bottom: 8px;
+      }
+
+      .presenter-score {
+        font-size: 16px;
+        color: #f0873e;
+      }
+
+      .divider {
+        height: 1px;
+        background-color: #edf1f7;
+        margin: 16px 0;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        background-color: #edf1f7;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #4e5968;
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>아기사자 과제 발표자 🦁</h1>
+        <p class="subtitle">오늘의 운세와 발표자를 확인해보자!</p>
+      </header>
+
+      <button id="generateButton" class="action-button">발표자 확인하기</button>
+
+      <div id="fortuneResults" class="fortune-results">
+        <!-- Results will be populated here -->
+      </div>
+    </div>
+
+    <script>
+      const names = ["소연", "승채", "연서", "채빈", "교은"]; // 세은님 개인사정으로 불참
+
+      const fortunes = [
+        "오래 미뤄둔 일이 오늘은 의외로 쉽게 해결될 수 있답니다.",
+        "실수해도 괜찮아요. 그 안에서 더 좋은 배움이 기다리고 있어요.",
+        "지나간 일은 내려놓고, 지금 눈앞의 일을 집중해보세요.",
+        "작지만 확실한 행복이 숨어 있는 하루예요. 천천히 둘러보세요.",
+        "오늘 하루는 마음 가는 대로 행동해보는 것도 괜찮아요.",
+        "물 흐르듯 자연스럽게 흘러가는 하루가 될 거예요.",
+        "무언가 새롭게 시작하기 좋은 타이밍이에요. 주저하지 마세요!",
+      ];
+
+      function getRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function getResultComment(score) {
+        if (score == 100)
+          return "왕큰운수의 주인공 !! 오늘은 아기사자의 왕이에요!";
+        else if (score >= 90)
+          return "무야호! 당신에겐 오늘 기적이 펼쳐질지도 몰라요!";
+        else if (score >= 70)
+          return "뭐든 술술 풀리는 날! 자신감 있는 아기사자가 되어보세요!!!";
+        else if (score >= 50)
+          return "평범하지만 무탈한 하루! 평범함이 진짜 행복함이라는거 아시죠????";
+        else if (score >= 30) return "뚝딱거리는 하루더라도 나름 괜찮은 하루.";
+        else return "오늘은 아무것도 안 해도 괜찮은 날~!!";
+      }
+
+      function getEmoji(score) {
+        if (score >= 90) return "✨";
+        else if (score >= 70) return "🌟";
+        else if (score >= 50) return "😊";
+        else if (score >= 30) return "🙂";
+        else return "😌";
+      }
+
+      function generateFortuneForAll() {
+        let highestScore = 0;
+        let presenter = "";
+        let results = [];
+
+        names.forEach((name) => {
+          const fortune = getRandom(fortunes);
+          const score = Math.floor(Math.random() * 100) + 1;
+          const comment = getResultComment(score);
+          const emoji = getEmoji(score);
+
+          results.push({ name, fortune, score, comment, emoji });
+
+          if (score > highestScore) {
+            highestScore = score;
+            presenter = name;
+          }
+        });
+
+        return { results, presenter, highestScore };
+      }
+
+      document
+        .getElementById("generateButton")
+        .addEventListener("click", function () {
+          const resultsContainer = document.getElementById("fortuneResults");
+          resultsContainer.style.display = "block";
+          this.textContent = "다시 확인하기";
+
+          // Generate fortunes
+          const { results, presenter, highestScore } = generateFortuneForAll();
+
+          // Clear previous results
+          resultsContainer.innerHTML = "";
+
+          // Create result cards for each person
+          results.forEach((result) => {
+            const card = document.createElement("div");
+            card.className = "result-card";
+
+            card.innerHTML = `
+                    <h2><span class="emoji">${result.emoji}</span> ${result.name}</h2>
+                    <p class="fortune-text">${result.fortune}</p>
+                    <p class="score">행운 점수: <strong>${result.score}</strong>점</p>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width: ${result.score}%"></div>
+                    </div>
+                    <p class="comment">${result.comment}</p>
+                `;
+
+            resultsContainer.appendChild(card);
+          });
+
+          // Create presenter announcement
+          const presenterElement = document.createElement("div");
+          presenterElement.className = "presenter";
+          presenterElement.innerHTML = `
+                <p class="presenter-title">🎉 오늘의 발표자는...</p>
+                <p class="presenter-name">${presenter} 님</p>
+                <p class="presenter-score">행운 점수: ${highestScore}점</p>
+                <div class="badge">행운왕</div>
+            `;
+
+          resultsContainer.appendChild(presenterElement);
+        });
+    </script>
+  </body>
+</html>
