@@ -31,25 +31,23 @@ function addTodo(event) {
     // 입력 필드 초기화
     todoInput.value = "";
   }
-
-  // 할 일 완료/삭제 처리 함수
-  function handleTodoClick(event) {
-    const target = event.target;
-
-    // 삭제 버튼 클릭 시
-    if (target.classList.contains("delete-btn")) {
-      target.parentElement.remove();
-    }
-
-    // 할 일 항목 클릭 시 (완료 표시)
-    else if (target.tagName === "SPAN") {
-      target.parentElement.classList.toggle("completed");
-    }
-  }
-
-  // 할 일 목록에 클릭 이벤트 리스너 추가
-  todoList.addEventListener("click", handleTodoClick);
 }
 
-// 폼 제출 이벤트 리스너 추가
+// 할 일 완료/삭제 처리 함수 (🔥 addTodo 밖으로 이동)
+function handleTodoClick(event) {
+  const target = event.target;
+
+  // 삭제 버튼 클릭 시
+  if (target.classList.contains("delete-btn")) {
+    target.parentElement.remove();
+  }
+
+  // 할 일 항목 클릭 시 (완료 표시)
+  else if (target.tagName === "SPAN") {
+    target.parentElement.classList.toggle("completed");
+  }
+}
+
+// 이벤트 리스너 등록 (🔥 click 이벤트 리스너 추가)
 todoForm.addEventListener("submit", addTodo);
+todoList.addEventListener("click", handleTodoClick);
