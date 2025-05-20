@@ -1,5 +1,5 @@
 import React from "react";
-import lion3 from "../assets/lion3.jpg";
+import lion3 from "../assets/lion3.png";
 
 const LionCard1 = () => {
   const isReal = false;

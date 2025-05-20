@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import LionCard1 from "./components/LionCard1";
 import LionCard2 from "./components/LionCard2";
-import LionCard3 from "./components/LionCrad3";
+import LionCard3 from "./components/LionCard3";
 
 const App = () => {
   const liar = "가짜 아기사자";
